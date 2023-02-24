@@ -1,2 +1,2 @@
-# jwhy-ma.github.com
+# jwhy-ma.blog
 my own website
