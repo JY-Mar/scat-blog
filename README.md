@@ -1,2 +1,2 @@
-# JWhy-Ma.blog
+# blog
 my own website
