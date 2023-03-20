@@ -1,6 +1,7 @@
 import validItem from './validItem'
 import reject from './reject'
 import merge from './merge'
+import test from './test'
 
 /**
  * @description  : file转base64
@@ -21,7 +22,7 @@ const file2base64 = file => {
  * @param         {Blob} blob
  * @return        {*} base64
  */
-const blob2Base64 = blob => {
+const blob2base64 = blob => {
   return new Promise((resolve, reject) => {
     const fileReader = new FileReader()
     fileReader.onload = e => {
@@ -81,11 +82,35 @@ const hex2rgba = (hex, opacity = 1) => {
 }
 
 /**
+ * @description  : RGBA转十六进制
+ * @param         {*} rgba
+ * @return        {*}
+ */
+const rgba2hex = rgba => {
+  const rgbaStr = rgba.replace(/\s/g, '')
+  if (test.rgba(rgbaStr)) {
+    const t = (rgbaStr.split('(')?.[1] || '').substring(0, rgbaStr.length - 1)
+    const tArr = t.split(',').slice(0, 4)
+    if (tArr.length === 3) {
+      // rgb
+      return `#${tArr.slice(0, 3).map(v => parseInt(v).toString(16)).join('').toUpperCase()}`
+    } else if (tArr.length === 4) {
+      // rgba
+      return `#${tArr.slice(0, 3).map(v => parseInt(v).toString(16)).join('').toUpperCase()}${(255 * parseFloat(tArr[3])).toString(16).toUpperCase()}`
+    } else {
+      return '#FFFFFF'
+    }
+  } else {
+    return '#FFFFFF'
+  }
+}
+
+/**
  * @description  : 驼峰转短横线
  * @param         {*} hump
  * @return        {*} 短横线Str
  */
-const hump2Dash = hump => {
+const hump2dash = hump => {
   const t = `${hump[0].toLowerCase()}${hump.slice(1, hump.length)}`
   return t.replace(/([A-Z])/g, '-$1').toLowerCase()
 }
@@ -95,7 +120,7 @@ const hump2Dash = hump => {
  * @param         {*} dash
  * @return        {*} 驼峰Str
  */
-const dash2Hump = dash => {
+const dash2hump = dash => {
   let t = dash
   for (const match of t.match(/-(.)/g) || []) {
     t = t.replace(match, match.replace('-', '').toUpperCase())
@@ -135,33 +160,6 @@ const num2chn = num => {
     console.log(t[i])
   }
   return temp
-}
-
-/**
- * @description  : 时间戳转换
- * @param         {Date,String,long} timestamp 时间戳
- * @param         {String} formatStr 转换格式
- * @return        {*}
- */
-const timestamp = (timestamp, formatStr = 'YYYY-MM-DD hh:mm:ss') => {
-  if (!validItem(timestamp)) return timestamp
-  const date = new Date(timestamp)
-  const dateObj = {
-    YYYY: date.getFullYear(),
-    MM: date.getMonth() + 1,
-    DD: date.getDate(),
-    hh: date.getHours(),
-    mm: date.getMinutes(),
-    ss: date.getSeconds()
-  }
-  const zero = val => {
-    return val > 9 ? val : '0' + val
-  }
-  let tTime = formatStr
-  for (const i in dateObj) {
-    tTime = tTime.replace(i, zero(dateObj[i]))
-  }
-  return tTime
 }
 
 /**
@@ -316,17 +314,104 @@ const array2object = (arr, defaultProps = { label: 'name', value: 'value' }) => 
   return tmp
 }
 
+/**
+ * @description  : 截取url中的键值对
+ * @param         {String} url
+ * @return        {*}
+ */
+const url2params = url => {
+  const params = {}
+  if (!validItem(url)) {
+    return params
+  }
+  if (typeof url !== 'string') {
+    return params
+  }
+  if (url.indexOf('?') > -1) {
+    const str = url.substring(url.indexOf('?') + 1)
+    const paramArr = str.split('&')
+    for (let i = 0; i < paramArr.length; i++) {
+      if (validItem(paramArr[i].split('=')?.[0])) {
+        params[paramArr[i].split('=')[0]] = paramArr[i].split('=')?.[1]
+      }
+    }
+  }
+  return params
+}
+
+/**
+ * @description  : 将键值对合成url
+ * @param         {*} params
+ * @return        {*}
+ */
+const params2url = params => {
+  if (!validItem(url)) {
+    return ''
+  }
+  if (Object.prototype.toString.call(params) !== '[object Object]') {
+    return ''
+  }
+  let arr = []
+  for (let i in params) {
+    arr.push(`${i}=${params[i] || ''}`)
+  }
+  return arr.join('&')
+}
+
+/**
+ * @description  : 字符串过长省略
+ * @param         {String} str 原串
+ * @param         {Number} len 限长
+ * @param         {Number} rows 最大显示行数
+ * @return        {*}
+ */
+const ellipsis = (str, len = 30, rows = Infinity) => {
+  if (typeof str !== 'string') return str
+  if (!validItem(len)) return str
+  if (len < 0) return str
+  // 原串长度 < 限长
+  if (str.length <= len) return str
+  const strSplit = split.str(str, len)
+  let tempStr = ''
+  for (let i = 0; i < strSplit.length; i++) {
+    if (i + 1 >= rows) {
+      // 当前分段为最大显示行数
+      if (i + 1 < strSplit.length) {
+        // 非最后一个分段
+        tempStr += `\n${strSplit[i]}...`
+        break
+      } else {
+        // 最后一个分段
+        if (strSplit[i].length <= len) {
+          // 分段长度短于/等于限长
+          tempStr += `\n${strSplit[i]}`
+          break
+        } else {
+          tempStr += `\n${strSplit[i]}...`
+          break
+        }
+      }
+    } else {
+      tempStr += `${i === 0 ? '' : '\n'}${strSplit[i]}`
+    }
+  }
+  return tempStr
+}
+
 export default {
   file2base64,
-  blob2Base64,
+  blob2base64,
   hex2rgba,
-  hump2Dash,
-  dash2Hump,
+  rgba2hex,
+  hump2dash,
+  dash2hump,
   num2chn,
-  timestamp,
   tree2list,
   list2tree,
   compressImg,
   object2array,
-  array2object
+  array2object,
+  url2params,
+  params2url,
+  ellipsis
 }

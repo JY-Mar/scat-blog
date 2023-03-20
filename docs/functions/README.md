@@ -1,16 +1,12 @@
 # 通用方法集
 
-## 判断值有效
+## 查找父组件
 
-### 单值判断
+@[code js](./js/$parent.js)
 
-验证值有效（不为 Null，undefined；当 Array 长度不为 0；对象属性数不为 0）
+## 格式化数值（加单位）
 
-@[code js](./js/validItem.js)
-
-### 多值判断
-
-@[code js](./js/valid.js)
+@[code js](./js/addUnit.js)
 
 ## 深拷贝
 
@@ -18,63 +14,13 @@
 
 @[code js](./js/clone.js)
 
-## 深合并
+## 计算
 
-递归实现对象深度合并
+@[code js](./js/compute.js)
 
-@[code js](./js/merge.js)
+## 转换
 
-## 判断全相等
-
-嵌套对象相等（两者可能顺序不同，但值相同），直接判断或者转成字符串判断会判断错误
-
-@[code js](./js/equal.js)
-
-## 防溢出的数值计算
-
-避免 JS 数学计算导致精度丢失 bug
-
-@[code{1-1} js{}](./js/math.js)
-
-### 浮点数乘法
-
-浮点数相乘
-
-@[code{3-20} js{}](./js/math.js)
-
-### 浮点数加法
-
-浮点数相加
-
-@[code{22-48} js{}](./js/math.js)
-
-### 浮点数减法
-
-浮点数相减
-
-@[code{50-76} js{}](./js/math.js)
-
-### 浮点数除法
-
-浮点数相除
-
-@[code{78-98} js{}](./js/math.js)
-
-### 计算两点（经纬度）之间的距离
-
-@[code{100-144} js{}](./js/math.js)
-
-## 从对象中抽出属性
-
-取出数组中的元素名的对应属性的键值对 组成新的对象后返回
-
-@[code js](./js/pick.js)
-
-## 从对象中剔除属性
-
-从对象中剔除符合 arr 中的元素名的元素
-
-@[code js](./js/reject.js)
+@[code js](./js/convert.js)
 
 ## 节流&防抖
 
@@ -94,27 +40,55 @@
 
 @[code js](./js/debounce.js)
 
-## 转换方法
+## 差异化判断
 
-@[code{1-3} js{}](./js/convert.js)
+@[code js](./js/diff.js)
 
-### 颜色 HEX 转 RGBA
+## 判断全相等
 
-@[code{38-81} js{}](./js/convert.js)
+嵌套对象相等（两者可能顺序不同，但值相同），直接判断或者转成字符串判断会判断错误
 
-### 对象转数组
+@[code js](./js/equal.js)
 
-@[code{279-297} js{}](./js/convert.js)
+## 格式化数据
 
-### 数组转对象
+@[code js](./js/filter.js)
 
-@[code{299-317} js{}](./js/convert.js)
+## 生成GUID
 
-## 压缩图片
+@[code js](js/guid.js)
 
-利用 canvas，将图片画在 canvas 上，然后转换为 blob 下载
+## 防溢出的数值计算
 
-@[code{236-277} js{}](./js/convert.js)
+避免 JS 数学计算导致精度丢失 bug
+
+@[code js](./js/math.js)
+
+## 深合并
+
+递归实现对象深度合并
+
+@[code js](./js/merge.js)
+
+## 从对象中抽出属性
+
+取出数组中的元素名的对应属性的键值对 组成新的对象后返回
+
+@[code js](./js/pick.js)
+
+## 随机数值
+
+@[code js](./js/rand.js)
+
+## 从对象中剔除属性
+
+从对象中剔除符合 arr 中的元素名的元素
+
+@[code js](./js/reject.js)
+
+## 字符串拆分
+
+@[code js](./js/split.js)
 
 ## 格式校验（正则）
 
@@ -124,38 +98,12 @@
 @[code{35-168} js{}](./js/test.js)
 :::
 
-## 格式化数据
+## 判断值有效 单值判断
 
-@[code{1-2} js{}](./js/filter.js)
+验证值有效（不为 Null，undefined；当 Array 长度不为 0；对象属性数不为 0）
 
-### 数额
+@[code js](./js/validItem.js)
 
-四舍五入两位小数
+## 判断值有效 多值判断
 
-@[code{4-21} js{}](./js/filter.js)
-
-### 手机号码/电话号码（国内）
-
-@[code{50-74} js{}](./js/filter.js)
-
-## 随机数值
-
-### 整数
-
-@[code{1-9} js{}](./js/rand.js)
-
-### 浮点数
-
-@[code{11-20} js{}](./js/rand.js)
-
-### GUID
-
-@[code{22-60} js{}](./js/rand.js)
-
-## 查找父组件
-
-@[code js](./js/$parent.js)
-
-## 格式化数值（加单位）
-
-@[code js](./js/addUnit.js)
+@[code js](./js/valid.js)
