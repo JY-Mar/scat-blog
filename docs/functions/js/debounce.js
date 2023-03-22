@@ -10,7 +10,7 @@ let timeout = null
  * @param {Boolean} immediate 是否立即执行。即多次触发事件，第一次会立即执行函数，之后在设定wait事件内触犯的事件无效，不会执行。（非立即执行：多次触发事件，只会在最后一次触发事件后等待设定的wait时间结束时执行一次。）
  * @return null
  */
-function debounce (func, wait = 500, immediate = false) {
+const debounce = (func, wait = 500, immediate = false) => {
   // 如果timeout不为null, 清除定时器
   if (timeout !== null) clearTimeout(timeout)
   // 立即执行，此类情况一般用不到
