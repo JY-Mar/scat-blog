@@ -9,12 +9,13 @@ import merge from './merge'
  *                    {
  *                      transforIllegal {Boolean} 是否转换null、undefined、''、[]、{}为undefined
  *                      ignoreCase {Boolean} 是否忽略属性名大小写
- *                      forceAssign {Boolean} 强制显示所有arr中出现的属性名，缺省值强制为null
+ *                      forceAssign {Boolean} 强制显示所有arr中出现的属性名，缺省值默认强制为null,
+ *                      forceAssignValue {String} 强制显示缺省值，默认为null
  *                    }
  * @return        {*} 新对象，属性名为arr子集
  */
 const pick = (obj, arr, options = {}) => {
-  const _options = merge({ transforIllegal: false, ignoreCase: false, forceAssign: false }, options)
+  const _options = merge({ transforIllegal: false, ignoreCase: false, forceAssign: false, forceAssignValue: null }, options)
   const t = {}
   if (!obj || !arr) return t
   // 非对象
@@ -33,7 +34,7 @@ const pick = (obj, arr, options = {}) => {
       const fdIndex = objKeysL.findIndex(v => v === arr[i].toLowerCase())
       if (fdIndex > -1) {
         if (_options.forceAssign && !validItem(source)) {
-          source = null
+          source = _options.forceAssignValue ?? null
         }
         if (_options.transforIllegal) {
           t[arr[i]] = validItem(source) ? source : undefined
@@ -42,7 +43,7 @@ const pick = (obj, arr, options = {}) => {
         }
       } else if (_options.forceAssign) {
         // arr中属性名不存在于obj中，并且强制赋值arr中出现的属性名
-        t[arr[i]] = null
+        t[arr[i]] = _options.forceAssignValue ?? null
       } else {
         // arr中属性名不存在于obj中
         continue
@@ -50,7 +51,7 @@ const pick = (obj, arr, options = {}) => {
     } else {
       if (Object.prototype.hasOwnProperty.call(obj, arr[i])) {
         if (_options.forceAssign && !validItem(source)) {
-          source = null
+          source = _options.forceAssignValue ?? null
         }
         if (_options.transforIllegal) {
           t[arr[i]] = validItem(source) ? source : undefined
@@ -59,7 +60,7 @@ const pick = (obj, arr, options = {}) => {
         }
       } else if (_options.forceAssign) {
         // arr中属性名不存在于obj中，并且强制赋值arr中出现的属性名
-        t[arr[i]] = null
+        t[arr[i]] = _options.forceAssignValue ?? null
       } else {
         // arr中属性名不存在于obj中
         continue
