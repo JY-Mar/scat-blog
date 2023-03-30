@@ -32,7 +32,7 @@ const clone = (obj) => {
   var o = isArray(obj) ? [] : {}
   for (const i in obj) {
     if (Object.prototype.hasOwnProperty.call(obj, i)) {
-      o[i] = isObject(obj) ? clone(obj[i]) : obj[i]
+      o[i] = (isObject(obj) || isArray(obj)) ? clone(obj[i]) : obj[i]
     }
   }
   return o
