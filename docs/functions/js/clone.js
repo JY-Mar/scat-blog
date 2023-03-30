@@ -3,17 +3,8 @@
  * @param         {*} arg
  * @return        {*}
  */
-const isArray = arg => {
-  return Object.prototype.toString.call(arg) === '[object Array]'
-}
-
-/**
- * @description  : 是对象
- * @param         {*} arg
- * @return        {*}
- */
-const isObject = arg => {
-  return Object.prototype.toString.call(arg) === '[object Object]'
+const isArray = (arr) => {
+  return Object.prototype.toString.call(arr) === '[object Array]'
 }
 
 /**
@@ -24,15 +15,22 @@ const isObject = arg => {
 const clone = (obj) => {
   // 对常见的“非”值，直接返回原来值
   if ([null, undefined, NaN, false].includes(obj)) return obj
-  // 原始类型直接返回
-  if (!isObject(obj) || !isArray(obj) || typeof obj !== 'function') {
+  if (typeof obj !== 'object' && typeof obj !== 'function') {
+    //原始类型直接返回
     return obj
   }
-
   var o = isArray(obj) ? [] : {}
   for (const i in obj) {
     if (Object.prototype.hasOwnProperty.call(obj, i)) {
-      o[i] = (isObject(obj) || isArray(obj)) ? clone(obj[i]) : obj[i]
+      if (typeof obj[i] === 'object') {
+        if ([Date, RegExp].includes(obj[i]?.constructor)) {
+          o[i] = new obj[i].constructor(obj[i])
+        } else {
+          o[i] = clone(obj[i])
+        }
+      } else {
+        o[i] = obj[i]
+      }
     }
   }
   return o
