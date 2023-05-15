@@ -24,6 +24,10 @@ git status
 ```sh
 git log
 ```
+- 查看HEAD分支切换记录
+```sh
+git reflog
+```
 
 ### 创建分支
 
@@ -130,12 +134,26 @@ git commit -m "提交描述"
 git push [origin <分支名>] [-f | --force]
 ```
 
-### 重置分支
+### 回退分支
 
 - 重置
 ```sh
 # 将HEAD重置到指定提交SHA，适用于非保护分支，且需要配合实用强制推送指令。不会生成一次新的提交记录，而是直接将提交回溯到之前某一时刻的提交。
+# 如果是多人合作项目，需要项目每一个参与者都执行本地分支回退
 git reset <SHA> [--hard | --soft]
+```
+- 反转
+```sh
+# -m 数字（从左到右从1开始），是针对merge提交点的操作
+git revert <sha> [-m index]
+```
+
+### 拷贝分支
+
+- 拷贝
+```sh
+# 拷贝某次提交到当前分支
+git cherry-pick <SHA>
 ```
 
 ## 常用场景
@@ -177,4 +195,30 @@ git push --delete origin <旧分支名>
 git push origin <新分支名>
 # 关联修改后的本地分支与远程分支
 git branch --set-upstream-to origin/<新分支名>
+```
+
+### 分支回退过程
+> 项目分支出现严重纰漏必须回退
+```sh
+# 获取到目的SHA
+git log
+
+# 方式一：reset 直接删除SHA之后的提交（）
+git reset <SHA> --hard
+# 推送后，所有项目成员都需要将此分支所在本地分支手动回退
+git push origin -f
+
+# 方式二：revert 新建一次提交，使SHA之后的提交全部失效（但不会删除）。如果之后需要使此次revert操作失效（即将失效部分状态反转为生效），可将revert的SHA再次执行反转操作。
+git revert <SHA>
+git commit -m "revert SHA <SHA>"
+git push
+```
+
+### 对历史某次提交操作过程
+> 历史某次提交存在不足，需要对其修改
+```sh
+# 获取到目的SHA
+git log
+
+
 ```
