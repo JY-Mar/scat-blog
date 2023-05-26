@@ -191,10 +191,10 @@ git branch -m <新分支名>
 git branch -m <旧分支名> <新分支名>
 # 删除远程分支
 git push --delete origin <旧分支名>
-# 推送新命名的本地分支
+# 推送新命名的分支到远程Git
 git push origin <新分支名>
 # 关联修改后的本地分支与远程分支
-git branch --set-upstream-to origin/<新分支名>
+git branch --set-upstream-to=origin/<远程分支> [本地分支]
 ```
 
 ### 分支回退过程
