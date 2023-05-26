@@ -214,11 +214,38 @@ git commit -m "revert SHA <SHA>"
 git push
 ```
 
-### 对历史某次提交操作过程
-> 历史某次提交存在不足，需要对其修改
+### 将A分支上AA次提交应用到B分支
+> 在错误的分支上进行了修改并提交，需要将它拷贝到并应用到正确分支（错误分支上的修改并不会被删除，仅是对其复制）
 ```sh
-# 获取到目的SHA
+# 在A分支获取到AA提交记录SHA
 git log
+# 在B分支
+git cherry-pick <SHA>
+# 处理冲突（若有）
+git push
+```
 
+### 修改提交注释
+> 注释写错/不适用于此次修改
+```sh
+# 1.修改最后一次提交注释（HEAD）
+git commit --amend
+# 此时会打印出此次提交信息，键盘键入“i”键启用vim编辑模式，修改备注，完成后键盘键入“ESC”键退出vim编辑模式，键盘键入“:”键输入“wq”保存修改并退出
+# 后将本地修改同步到远程分支
+git push -f origin <分支名>
 
+# 2.修改非最后一次提交注释
+# HEAD~后输入想要查询倒数N次提交结果，返回结果每一行为一次提交记录
+git rebase -i HEAD~<倒数第N次提交>
+# 键盘键入“i”键启用vim编辑模式，在想要修改的那一次提交（行）前，将“pick”修改为“edit”，可同时修改多个
+# 完成后键盘键入“ESC”键退出vim编辑模式，键盘键入“:”键输入“wq”保存修改并退出
+# 终端会提示你输入“git commit --amend”或者“git rebase --continue”，按照提示输入
+# 修改提交注释
+git commit --amend
+# 键盘键入“i”键启用vim编辑模式，修改备注，完成后键盘键入“ESC”键退出vim编辑模式，键盘键入“:”键输入“wq”保存修改并退出，完成后输入：
+git rebase --continue
+# 如果是修改多条，会提示当前进度（1/N），分支名也会变成“你的分支名|REBASE-i 1/N”
+# 如果所有需要修改的提交全都修改完毕则终端会提示“Successfully rebased and updated refs/heads/你的分支名”，并且分支名后的“|REBASE-i 1/N”会消失
+# 后将本地修改同步到远程分支
+git push -f origin <分支名>
 ```
