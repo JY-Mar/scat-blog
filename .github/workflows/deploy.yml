@@ -46,4 +46,4 @@ jobs:
         env:
           # 当前仓库的密钥
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GH_PAT: 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
+          GH_PAT: JY-Mar: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
